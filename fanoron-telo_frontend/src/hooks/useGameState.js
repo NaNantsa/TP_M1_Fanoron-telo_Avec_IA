@@ -6,7 +6,8 @@ import {
   LABELS,
 } from "../utils/gameLogic";
 
-const initialState = (mode = null, difficulty = "medium") => ({
+const initialState = ( mode = null,difficulty = "medium",aiDifficulty = null
+) => ({
   board: Array(9).fill(null),
   currentPlayer: "X",
   phase: 1,
@@ -17,41 +18,48 @@ const initialState = (mode = null, difficulty = "medium") => ({
   history: [],
   moveLog: [],
   scores: { X: 0, O: 0 },
+
   mode,
   difficulty,
+
+  aiDifficulty: aiDifficulty ?? {
+    X: difficulty,
+    O: difficulty,
+  },
 });
 
-export function useGameState(mode, difficulty) {
-  const [state, setState] = useState(() => initialState(mode, difficulty));
+export function useGameState(mode, difficulty,aiDifficulty) {
+  const [state, setState] = useState(() => initialState(mode, difficulty,aiDifficulty));
 
   const reset = useCallback(
     (keepScores = true) => {
       setState((s) => ({
-        ...initialState(s.mode, s.difficulty),
+        ...initialState(s.mode, s.difficulty,s.aiDifficulty),
         scores: keepScores ? s.scores : { X: 0, O: 0 },
       }));
     },
     []
   );
 
-  const setMode = useCallback((nextMode, nextDifficulty) => {
+  const setMode = useCallback((nextMode, nextDifficulty,nextaiDifficulty) => {
     setState((s) => ({
-      ...initialState(nextMode, nextDifficulty ?? s.difficulty),
+      ...initialState(nextMode, nextDifficulty ?? s.difficulty, nextaiDifficulty ?? s.aiDifficulty),
       scores: s.scores,
     }));
   }, []);
 
-  const snapshot = (s) => ({
-    board: s.board.slice(),
-    currentPlayer: s.currentPlayer,
-    phase: s.phase,
-    piecesPlaced: s.piecesPlaced,
-    selectedCell: s.selectedCell,
-    winner: s.winner,
-    winLine: s.winLine,
-    moveLog: s.moveLog.slice(),
-    scores: { ...s.scores },
-  });
+const snapshot = (s) => ({
+  board: s.board.slice(),
+  currentPlayer: s.currentPlayer,
+  phase: s.phase,
+  piecesPlaced: s.piecesPlaced,
+  selectedCell: s.selectedCell,
+  winner: s.winner,
+  winLine: s.winLine,
+  moveLog: s.moveLog.slice(),
+  scores: { ...s.scores },
+  aiDifficulty: { ...s.aiDifficulty },
+});
 
   // Apply a placement (phase 1) or a movement {from,to} (phase 2).
   const applyMove = useCallback((move) => {

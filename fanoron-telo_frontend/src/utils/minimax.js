@@ -5,11 +5,54 @@ import {
   opponent,
 } from "./gameLogic";
 
-function evaluate(board, aiPlayer) {
-  const { winner } = checkWinner(board);
-  if (winner === aiPlayer) return 1000;
-  if (winner && winner !== aiPlayer) return -1000;
-  return 0;
+import { WIN_LINES } from "./gameLogic";
+
+function evaluate(board, aiPlayer){
+
+    const enemy = opponent(aiPlayer);
+
+    const {winner} = checkWinner(board);
+
+    if(winner === aiPlayer) return 1000;
+    if(winner === enemy) return -1000;
+
+    let score = 0;
+
+    // Centre
+    if(board[4] === aiPlayer) score += 30;
+    if(board[4] === enemy) score -= 30;
+
+
+    for(const [a,b,c] of WIN_LINES){
+
+        const line = [board[a],board[b],board[c]];
+
+        const mine =
+            line.filter(x=>x===aiPlayer).length;
+
+        const opp =
+            line.filter(x=>x===enemy).length;
+
+        const empty =
+            line.filter(x=>x==null).length;
+
+
+        if(mine===2 && empty===1)
+            score += 50;
+
+        if(opp===2 && empty===1)
+            score -= 60;
+    }
+
+
+    score +=
+        getValidMovements(board,aiPlayer).length * 3;
+
+    score -=
+        getValidMovements(board,enemy).length * 3;
+
+
+    return score;
 }
 
 function generateMoves(board, player, phase, piecesPlaced) {
@@ -77,7 +120,7 @@ function minimax(
       alpha,
       beta
     );
-    const score = res.score - (maxing ? 0 : 0);
+    const score = res.score
     if (maxing) {
       if (score > best.score) best = { score, move };
       if (useAB) {
@@ -99,10 +142,8 @@ export function getBestMove(board, player, difficulty, phase, piecesPlaced) {
   const moves = generateMoves(board, player, phase, piecesPlaced);
   if (moves.length === 0) return null;
 
-  if (difficulty === "easy") {
-    return moves[Math.floor(Math.random() * moves.length)];
-  }
-  const depth = difficulty === "hard" ? 6 : 3;
+
+  const depth = difficulty === "hard" ? 6 : difficulty == "medium" ? 3 : 1;
   const useAB = difficulty === "hard";
   const res = minimax(
     board,

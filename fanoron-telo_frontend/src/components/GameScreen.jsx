@@ -5,15 +5,21 @@ import PlayerInfo from "./PlayerInfo";
 import MoveHistory from "./MoveHistory";
 import WinScreen from "./WinScreen";
 
-export default function GameScreen({ mode, difficulty, onMenu }) {
-  const { state, handleCellClick, applyMove, undo, reset, validTargets, pieceCounts } =
-    useGameState(mode, difficulty);
+export default function GameScreen({ mode,difficulty, aiDifficulty, onMenu }) {
+  const {
+    state,
+    handleCellClick,
+    applyMove,
+    undo,
+    reset,
+    validTargets,
+    pieceCounts,
+  } = useGameState(mode,difficulty,aiDifficulty,);
 
   const { thinkingMs, aiMoveCount, resetAIStats } = useAI({
     state,
     applyMove,
     mode,
-    difficulty,
   });
 
   const disabled =
@@ -28,26 +34,32 @@ export default function GameScreen({ mode, difficulty, onMenu }) {
 
   return (
     <div className="min-h-screen px-4 md:px-6 py-4 fade-in relative">
-      {/* Top bar */}
+
+      {/* TOP BAR */}
       <div className="flex items-center justify-between gap-3 mb-4">
         <div className="card-surface px-4 py-2 text-sm">
-          <span className="opacity-70">Phase :</span>{" "}
-          <span className="font-display" style={{ color: "var(--gold)" }}>
+          Phase :{" "}
+          <span style={{ color: "var(--gold)" }}>
             {state.phase === 1 ? "Placement" : "Déplacement"}
           </span>
         </div>
+
         <div className="card-surface px-4 py-2 text-sm">
-          <span className="opacity-70">Tour :</span>{" "}
-          <span className="font-display" style={{ color: state.currentPlayer === "X" ? "#E8C96B" : "#C0392B" }}>
+          Tour :{" "}
+          <span style={{ color: state.currentPlayer === "X" ? "#E8C96B" : "#C0392B" }}>
             {state.currentPlayer}
           </span>
         </div>
-        <button className="btn-outline" onClick={onMenu}>Menu</button>
+
+        <button className="btn-outline" onClick={onMenu}>
+          Menu
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_260px] gap-4 items-start">
-        {/* Left player */}
-        <div className="space-y-3 order-2 lg:order-1">
+      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_260px] gap-4">
+
+        {/* LEFT */}
+        <div className="space-y-3">
           <PlayerInfo
             name={mode === "aivai" ? "IA — X" : "Joueur X"}
             color="#E8C96B"
@@ -55,18 +67,19 @@ export default function GameScreen({ mode, difficulty, onMenu }) {
             placed={pieceCounts.X}
             score={state.scores.X}
           />
+
           {mode === "aivai" && (
             <div className="card-surface p-3 text-sm">
-              <div className="font-display text-sm opacity-80 mb-1">Stats IA</div>
-              <div className="opacity-90">Coups : {aiMoveCount}</div>
-              <div className="opacity-90">Réflexion : {thinkingMs} ms</div>
-              <div className="opacity-70 text-xs mt-1">Difficulté : {difficulty}</div>
+              <div>Coups IA : {aiMoveCount}</div>
+              <div>Réflexion : {thinkingMs} ms</div>
+              <div>IA X : {aiDifficulty.X}</div>
+              <div>IA O : {aiDifficulty.O}</div>
             </div>
           )}
         </div>
 
-        {/* Board */}
-        <div className="relative order-1 lg:order-2">
+        {/* BOARD */}
+        <div className="relative">
           <Board
             board={state.board}
             selectedCell={state.selectedCell}
@@ -75,32 +88,45 @@ export default function GameScreen({ mode, difficulty, onMenu }) {
             onCellClick={handleCellClick}
             disabled={disabled}
           />
+
           {state.winner && (
-            <WinScreen winner={state.winner} onReplay={onReplay} onMenu={onMenu} />
+            <WinScreen
+              winner={state.winner}
+              onReplay={onReplay}
+              onMenu={onMenu}
+            />
           )}
         </div>
 
-        {/* Right player */}
-        <div className="space-y-3 order-3">
+        {/* RIGHT */}
+        <div className="space-y-3">
           <PlayerInfo
-            name={mode === "hvh" ? "Joueur O" : (mode === "aivai" ? "IA — O" : `IA (${difficulty})`)}
+            name={
+              mode === "hvh"
+                ? "Joueur O"
+                : "IA — O"
+            }
             color="#C0392B"
             isTurn={state.currentPlayer === "O" && !state.winner}
             placed={pieceCounts.O}
             score={state.scores.O}
             align="right"
           />
+
           <MoveHistory log={state.moveLog} />
         </div>
+
       </div>
 
-      {/* Bottom actions */}
+      {/* ACTIONS */}
       <div className="flex gap-3 justify-center mt-6">
-        <button className="btn-outline" onClick={undo}
-          disabled={state.history.length === 0}>
+        <button className="btn-outline" onClick={undo}>
           Annuler
         </button>
-        <button className="btn-gold" onClick={onReplay}>Nouvelle Partie</button>
+
+        <button className="btn-gold" onClick={onReplay}>
+          Nouvelle Partie
+        </button>
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { getBestMove } from "../utils/minimax";
 
-// Drives AI moves for "hvai" (AI plays "O") and "aivai" (both).
-export function useAI({ state, applyMove, mode, difficulty }) {
+// AI driver (HVAI + AIVAI)
+export function useAI({ state, applyMove, mode }) {
   const [thinkingMs, setThinkingMs] = useState(0);
   const [aiMoveCount, setAiMoveCount] = useState(0);
   const timerRef = useRef(null);
@@ -26,21 +26,45 @@ export function useAI({ state, applyMove, mode, difficulty }) {
 
     timerRef.current = setTimeout(() => {
       const t0 = performance.now();
+
+      // 🔥 SAFE ACCESS (important)
+      const playerDifficulty =
+        state.aiDifficulty?.[state.currentPlayer] ?? "medium";
+
+      console.log("difficulté selectionné : " , playerDifficulty)
       const move = getBestMove(
         state.board,
         state.currentPlayer,
-        difficulty,
+        playerDifficulty,
         state.phase,
         state.piecesPlaced
       );
+
       const t1 = performance.now();
+
       setThinkingMs(Math.round(t1 - t0));
       setAiMoveCount((c) => c + 1);
+
       if (move) applyMove(move);
     }, delay);
 
     return () => clearTimeout(timerRef.current);
-  }, [state.board, state.currentPlayer, state.phase, state.winner, mode, difficulty, state.piecesPlaced, applyMove]);
+  }, [
+    state.board,
+    state.currentPlayer,
+    state.phase,
+    state.winner,
+    state.piecesPlaced,
+    mode,
+    applyMove,
+  ]);
 
-  return { thinkingMs, aiMoveCount, resetAIStats: () => { setThinkingMs(0); setAiMoveCount(0); } };
+  return {
+    thinkingMs,
+    aiMoveCount,
+    resetAIStats: () => {
+      setThinkingMs(0);
+      setAiMoveCount(0);
+    },
+  };
 }

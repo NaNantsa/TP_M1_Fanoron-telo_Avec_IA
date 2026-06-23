@@ -41,7 +41,7 @@ export function getValidPlacements(board) {
   const out = [];
   for (let i = 0; i < 9; i++) if (!board[i]) out.push(i);
   return out;
-}
+};
 
 export function getValidMovements(board, player) {
   const moves = [];
