@@ -4,13 +4,34 @@
 
 [Institut Supérieur Polytechnique de Madagascar](https://www.ispm-edu.com)
 
-**Nom du groupe :** [À compléter]
+**Nom du groupe :**   AllCode
 
-| Nom Complet | Numéro d'étudiant | Classe | Rôle précis |
-|-------------|-------------------|--------|-------------|
-|             |                   |        | Lead AI & Minimax |
-|             |                   |        | UI/UX Designer & Frontend |
-|             |                   |        | Game Logic & Architecture |
+| Nom Complet        | Numéro d'étudiant | Classe | Rôle précis           |
+|--------------------|-------------------|--------|-----------------------|
+|ANDRIANARINJANAHARY |        03         |ESIIA 4 |UI/UX Designer &       |
+|Antsaniavo          |                   |        |Frontend Developer     |
+|--------------------|-------------------|--------|-----------------------|
+|RAKOTONDRAINIBE     |        04         |ESIIA 4 |Lead & projet          |
+|Michel Antonio      |                   |        |Architect              |
+|--------------------|-------------------|--------|-----------------------|
+|MIARIVOLA           |        11         |ESIIA 4 |Release Manager        |
+|Tiavina Nico        |                   |        |                       |
+|--------------------|-------------------|--------|-----------------------|
+|ANDRIAMBOLASOA      |        16         |ESIIA 4 |Release Manager        |
+|Radoniaina          |                   |        |                       |
+|Fitahiana           |                   |        |                       |
+|--------------------|-------------------|--------|-----------------------|
+|ANDRIAMIHAJAMANANA  |        17         |ESIIA 4 |Frontend Developer     |
+|Mialitiana          |                   |        |                       |
+|--------------------|-------------------|--------|-----------------------|
+|RAVELONANAHARY      |        30         |ESIIA 4 |UI/UX Designer         |
+|Manjato             |                   |        |                       |
+|--------------------|-------------------|--------|-----------------------|
+|RAKELISAMIMANANA    |        39         |ESIIA 4 |Lead IA                |
+|Faniriniaina        |                   |        |                       |
+|Fifaliana           |                   |        |                       |
+|--------------------|-------------------|--------|-----------------------|
+
 
 ---
 
@@ -18,7 +39,7 @@
 
 Application web complète du jeu traditionnel malgache **Fanoron-telo** avec intelligence artificielle intégrée.
 
-**Fonctionnalités implémentées en 5 heures :**
+**Fonctionnalités :**
 - 5 modes de jeu : Humain vs Humain, Humain vs IA (3 niveaux), IA vs IA démo
 - IA avec algorithme Minimax + élagage Alpha-Beta (niveau difficile)
 - Système Undo/Redo complet
@@ -29,14 +50,15 @@ Application web complète du jeu traditionnel malgache **Fanoron-telo** avec int
 - Logique IA entièrement côté frontend (JavaScript pur)
 - Aucune dépendance backend
 
-**Version hébergée :** [lien à ajouter]
+**Version hébergée :** 
+https://fanoron-telo.vercel.app/
 
 ---
 
 ## Section 3 : Guide d'Installation Rapide
 
 ```bash
-git clone <url_du_depot>
+git clone <https://github.com/NaNantsa/TP_M1_Fanoron-telo_Avec_IA.git>
 npm install
 npm run dev
 ```
@@ -45,11 +67,11 @@ npm run dev
 
 ## Section 4 : Outils d'Aide IA Utilisés
 
-| Outil | Usage |
-|-------|-------|
+|        Outil       |                                   Usage                                  |
+|--------------------|--------------------------------------------------------------------------|
 | Claude (Anthropic) | Architecture du projet, prompt Lovable, algorithme Minimax, gameLogic.js |
-| GitHub Copilot | Autocomplétion des fonctions d'adjacence et détection de victoire |
-| Lovable | Génération initiale des composants React et du design |
+| GitHub Copilot     | Autocomplétion des fonctions d'adjacence et détection de victoire        |
+| Lovable            | Génération initiale des composants React et du design                    |
 
 **Gain de temps estimé :** ~65% sur la partie algorithmique IA et la structure des composants.
 
@@ -80,10 +102,10 @@ const ADJACENCY = {
 
 ## Section 6 : Analyses de Performances
 
-| Niveau | Temps moyen par coup | Taux victoire IA vs IA Moyen |
-|--------|---------------------|------------------------------|
-| Facile | < 5 ms | ~25% |
-| Moyen  | ~15 ms | ~60% |
-| Difficile | ~50 ms | ~95% |
+| Niveau    | Temps moyen par coup | Taux victoire IA vs IA Moyen |
+|-----------|----------------------|------------------------------|
+| Facile    |        < 5 ms        |             ~25%             |
+| Moyen     |        ~15 ms        |             ~60%             |
+| Difficile |        ~50 ms        |             ~95%             |
 
 Métrique mesurée via `performance.now()` avant/après chaque appel `getBestMove()`, affichée en temps réel dans le mode IA vs IA.
