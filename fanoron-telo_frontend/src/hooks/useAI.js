@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getBestMove } from "../utils/minimax";
 
-// AI driver (HVAI + AIVAI)
 export function useAI({ state, applyMove, mode }) {
   const [thinkingMs, setThinkingMs] = useState(0);
   const [aiMoveCount, setAiMoveCount] = useState(0);
@@ -11,31 +10,24 @@ export function useAI({ state, applyMove, mode }) {
     if (!mode) return;
     if (state.winner) return;
 
-    let shouldPlay = false;
-    let delay = 350;
+    const isAIVAI = mode === "aivai";
+    const isHVAI = mode === "hvai" && state.currentPlayer === "O";
 
-    if (mode === "hvai" && state.currentPlayer === "O") {
-      shouldPlay = true;
-      delay = 400;
-    } else if (mode === "aivai") {
-      shouldPlay = true;
-      delay = 800;
-    }
+    if (!isAIVAI && !isHVAI) return;
 
-    if (!shouldPlay) return;
+    const delay = isAIVAI ? 500 : 400;
 
     timerRef.current = setTimeout(() => {
       const t0 = performance.now();
 
-      // 🔥 SAFE ACCESS (important)
-      const playerDifficulty =
-        state.aiDifficulty?.[state.currentPlayer] ?? "medium";
+      // 🔥 IMPORTANT : difficulté correcte
+      const difficulty =
+        state.aiDifficulty?.[state.currentPlayer] ?? state.difficulty ?? "medium";
 
-      console.log("difficulté selectionné : " , playerDifficulty)
       const move = getBestMove(
         state.board,
         state.currentPlayer,
-        playerDifficulty,
+        difficulty,
         state.phase,
         state.piecesPlaced
       );
@@ -50,13 +42,15 @@ export function useAI({ state, applyMove, mode }) {
 
     return () => clearTimeout(timerRef.current);
   }, [
+    mode,
     state.board,
     state.currentPlayer,
     state.phase,
-    state.winner,
     state.piecesPlaced,
-    mode,
+    state.winner,
     applyMove,
+    state.aiDifficulty,
+    state.difficulty
   ]);
 
   return {
