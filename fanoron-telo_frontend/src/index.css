@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #080E1A;
+  --surface: #0F1E33;
+  --gold: #4A90D9;
+  --cream: #D6E4F7;
+  --x: #6BAED6;
+  --o: #C0392B;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--cream);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: "Cinzel", serif;
+  letter-spacing: 0.03em;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 200ms ease-out; }
+
+@keyframes piecePop {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.piece-pop { animation: piecePop 150ms ease-out; transform-origin: center; transform-box: fill-box; }
+
+@keyframes winPulse {
+  0%, 100% { stroke-opacity: 0.6; stroke-width: 6; }
+  50%      { stroke-opacity: 1; stroke-width: 10; }
+}
+.win-pulse { animation: winPulse 1.1s ease-in-out infinite; }
+
+@keyframes targetPulse {
+  0%, 100% { opacity: 0.35; r: 18; }
+  50%      { opacity: 0.9; r: 22; }
+}
+.target-pulse { animation: targetPulse 1.2s ease-in-out infinite; transform-origin: center; }
+
+.btn-gold {
+  background: linear-gradient(180deg, #5BA3E8 0%, #2563AB 100%);
+  color: #080E1A;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.75rem 1.75rem;
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  box-shadow: 0 4px 14px rgba(74, 144, 217, 0.30);
+}
+.btn-gold:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.btn-gold:active { transform: translateY(0); }
+.btn-gold:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+.btn-outline {
+  border: 1px solid rgba(74, 144, 217, 0.5);
+  color: var(--cream);
+  background: transparent;
+  border-radius: 9999px;
+  padding: 0.6rem 1.4rem;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.btn-outline:hover { background: rgba(74, 144, 217, 0.12); border-color: var(--gold); }
+
+.card-surface {
+  background: linear-gradient(180deg, #0F1E33 0%, #080E1A 100%);
+  border: 1px solid rgba(74, 144, 217, 0.18);
+  border-radius: 14px;
+}
